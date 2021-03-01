@@ -16,7 +16,7 @@ theme.font          = "sans 8"
 theme.bg_normal     = "#1d1f21"
 theme.fg_normal     = "#c5c8c6" 
 
-theme.bg_focus      = "#8abeb7"
+theme.bg_focus      = "#bc4838"
 theme.fg_focus      = "#282a2e"
 
 theme.bg_urgent     = "#a54242"
@@ -50,16 +50,13 @@ theme.border_marked = "#cc6666"
 theme.taglist_bg_focus = "#de935f"
 theme.taglist_fg_focus = "#1d1f21"
 
-theme.taglist_bg_volatile = "#cc6666"
-theme.taglist_fg_volatile = "#1d1f21"
-
-theme.taglist_bg_occupied = "#3e5d59"
+theme.taglist_bg_occupied = "#707880"
 theme.taglist_fg_occupied = "#121f21"
 
 theme.taglist_bg_empty = "#c5c8c6"
 theme.taglist_fg_empty = "#282a2e"
 
-theme.taglist_separator = "#81a2be"
+theme.taglist_separator = "#de935f"
 
 theme.taglist_square_sel = "#8abeb7"
 
@@ -74,21 +71,21 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 
 
 -- tasklist colors
-theme.tasklist_bg_focus = "#de935f"
-theme.tasklist_fg_focus = "#1d1f21"
+theme.tasklist_bg_focus = "#ef8800"
+theme.tasklist_fg_focus = "#121f21"
 
 theme.tasklist_bg_normal = "#c5c8c6"
-theme.tasklist_fg_normal = "#121f21"
+theme.tasklist_fg_normal = "#373b41"
 
-theme.tasklist_bg_minimized = "#8abeb7"
-theme.tasklist_fg_minimized = "#282a2e"
+theme.tasklist_bg_minimized = "#707880"
+theme.tasklist_fg_minimized = "#121f21"
 
-theme.tasklist_separator = "#de935f"
+theme.tasklist_separator = "#ef8800"
 
-theme.time_bg = "#8abeb7"
+theme.time_bg = "#5e9de5"
 theme.time_fg = "#282a2e"
 
-theme.layout_bg = "#de935f"
+theme.layout_bg = "#ef8800"
 -- Variables set for theming notifications:
 -- notification_font
 -- notification_[bg|fg]

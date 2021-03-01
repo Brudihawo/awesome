@@ -108,7 +108,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+mytextclock = wibox.widget.textclock("%d.%m %H:%M")
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -163,8 +163,20 @@ local function set_wallpaper(s)
 end
 
 
+
 local cpu_widget = require("awesome-wm-widgets.cpu-widget.cpu-widget")
 
+local function flipped_sepshape(cr, width, height)
+    gears.shape.transform(gears.shape.powerline) : rotate_at(width / 2, height / 2, math.pi) : translate(1, 0)(cr, width, height)
+end
+
+local function flipped_tagshape(cr, width, height)
+    gears.shape.transform(gears.shape.powerline) : rotate_at(width / 2, height / 2, math.pi)(cr, width, height) 
+end
+
+local function taglist_bg_shape(cr, width, height)
+  gears.shape.transform(gears.shape.rectangular_tag) : rotate_at(width / 2, height / 2, math.pi) (cr, width, height)
+end
 
 -- Re-set wallpaper when a screens geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
@@ -191,27 +203,29 @@ awful.screen.connect_for_each_screen(function(s)
         screen  = s,
         filter  = awful.widget.taglist.filter.all,
         style   = {
-          border_width  = 5,
+          border_width  = 14,
           shape         = gears.shape.powerline,
-          squares_sel   = gears.surface.load_from_shape(16, 20, gears.shape.powerline, 
+          squares_sel   = gears.surface.load_from_shape(20, 20, gears.shape.powerline, 
                                                         beautiful.taglist_square_sel),
-          squares_unsel = gears.surface.load_from_shape(16, 20, gears.shape.powerline,
-                                                        beautiful.taglist_square_unsel),
+          -- squares_unsel = gears.surface.load_from_shape(18, 20, gears.shape.powerline,
+          --                                               beautiful.taglist_square_unsel),
           fg_focus      = beautiful.taglist_fg_focus,
           bg_focus      = beautiful.taglist_bg_focus,
           fg_empty      = beautiful.taglist_fg_empty, 
           bg_empty      = beautiful.taglist_bg_empty,
           fg_occupied   = beautiful.taglist_fg_occupied,
           bg_occupied   = beautiful.taglist_bg_occupied,
+          fg_volatile   = beautiful.taglist_fg_volatile,
+          bg_volatile   = beautiful.taglist_bg_volatile,
         },
         layout  = {
-          spacing = -12,
+          spacing = 0,
           spacing_widget = {
             color  = beautiful.taglist_separator,
             shape  = gears.shape.powerline,
             widget = wibox.widget.separator,
           },
-          layout = wibox.layout.flex.horizontal,
+          layout = wibox.layout.fixed.horizontal,
         },
         widget_template = {
           {
@@ -230,7 +244,7 @@ awful.screen.connect_for_each_screen(function(s)
               },
               layout = wibox.layout.fixed.horizontal,
             },
-            left  = 25,
+            left  = 30,
             right = 25,
             widget = wibox.container.margin,
           },
@@ -248,15 +262,22 @@ awful.screen.connect_for_each_screen(function(s)
         filter  = awful.widget.tasklist.filter.currenttags,
         buttons = tasklist_buttons,
         style = {
-          gears.shape.powerline
+          border_width = 14,
+          shape = flipped_tagshape,
+          bg_focus = beautiful.tasklist_bg_focus,
+          fg_focus = beautiful.tasklist_fg_focus,
+          bg_normal = beautiful.tasklist_bg_normal,
+          fg_normal = beautiful.tasklist_fg_normal,
+          bg_urgent = beautiful.tasklist_bg_urgent,
+          fg_urgent = beautiful.tasklist_fg_urgent,
         },
-        layout  = {
-          spacing = -12,
+        layout = {
           spacing_widget = {
-            color  = beautiful.taglist_separator,
-            shape  = gears.shape.powerline,
+            shape = flipped_sepshape,
             widget = wibox.widget.separator,
+            color = beautiful.tasklist_separator,
           },
+          spacing = -14,
           layout = wibox.layout.flex.horizontal,
         },
         widget_template = {
@@ -264,7 +285,7 @@ awful.screen.connect_for_each_screen(function(s)
             {
               {
                 {
-                  id = 'icon_role',
+                  id     = 'icon_role',
                   widget = wibox.widget.imagebox,
                 },
                 margins = 2,
@@ -276,41 +297,68 @@ awful.screen.connect_for_each_screen(function(s)
               },
               layout = wibox.layout.fixed.horizontal,
             },
-            left  = 18,
-            right = 18,
+            left   = 20,
+            right  = 20,  
             widget = wibox.container.margin,
           },
-          id = "background_role",
+          id = 'background_role',
           widget = wibox.container.background,
-          bg = beautiful.taglist_bg_normal,
         },
-        buttons = taglist_buttons,
-    }
+      }
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top",
-                              screen   = s,
-                              opacity  = 0.9,
-                            })
+    s.wibox_left = awful.wibar({ position = "top",
+                                 screen   = s,
+                               })
 
-    -- Add widgets to the wibox
-    s.mywibox:setup {
-        layout = wibox.layout.align.horizontal,
-        s.mytaglist,  -- Left Taglist
-        s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            cpu_widget({
-              width=70,
-              step_width=2,
-              step_spacing=2,
-              color="#8abeb7"}),
-            mykeyboardlayout,
-            wibox.widget.systray(),
-            mytextclock,
-            s.mylayoutbox,
-        },
+    local time_widget = wibox.widget {
+          {
+            widget = wibox.container.background,
+            shape = flipped_sepshape,
+            {
+              mytextclock,
+              left = 15,
+              right = 20,
+              widget = wibox.container.margin,
+            },
+            bg = beautiful.time_bg,
+            fg = beautiful.time_fg,
+          },
+          widget = wibox.container.margin,
     }
+    
+    -- Add widgets to the wibox
+    s.wibox_left:setup {
+      {
+        s.mytaglist, 
+        shape = taglist_bg_shape,
+        widget = wibox.container.background,
+        bg = beautiful.taglist_separator,
+      },
+      {
+        s.mytasklist,
+        widget = wibox.container.place,
+        halign = 'right',
+      },
+      {
+        time_widget,
+        {
+          {
+            widget = wibox.container.margin,
+            left = 15,
+            right = 10,
+            s.mylayoutbox,
+          },
+          widget = wibox.container.background,
+          shape = gears.shape.rectangular_tag,
+          bg = beautiful.layout_bg,
+        },
+        layout  = wibox.layout.fixed.horizontal,
+        spacing = -12,
+      },
+      layout = wibox.layout.align.horizontal,
+    }
+
 end)
 -- }}}
 
@@ -406,7 +454,7 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Prompt / window finder
-    awful.key({ modkey },            "r",     function () awful.util.spawn_with_shell("rofi -modi drun,window,combi -combi-modi drun,window -show combi") end,
+    awful.key({ modkey },            "r",     function () awful.util.spawn_with_shell("rofi -modi drun,window,combi -combi-modi drun,window -theme lb -show combi") end,
               {description = "run rofi launcher", group = "launcher"}),
 
     awful.key({ modkey }, "x",
