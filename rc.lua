@@ -46,10 +46,10 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 -- beautiful.init("/home/brudihawo/.config/awesome/default/theme.lua")
-local theme_path = string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), "default")
+local theme_path = string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), "wal_theme")
 beautiful.init(theme_path)
 -- This is used later as the default terminal and editor to run.
-terminal = "gnome-terminal"
+terminal = "st"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -205,10 +205,8 @@ awful.screen.connect_for_each_screen(function(s)
         style   = {
           border_width  = 14,
           shape         = gears.shape.powerline,
-          squares_sel   = gears.surface.load_from_shape(20, 20, gears.shape.powerline, 
+          squares_sel   = gears.surface.load_from_shape(beautiful.square_size, beautiful.square_size, gears.shape.powerline, 
                                                         beautiful.taglist_square_sel),
-          -- squares_unsel = gears.surface.load_from_shape(18, 20, gears.shape.powerline,
-          --                                               beautiful.taglist_square_unsel),
           fg_focus      = beautiful.taglist_fg_focus,
           bg_focus      = beautiful.taglist_bg_focus,
           fg_empty      = beautiful.taglist_fg_empty, 
@@ -454,7 +452,7 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Prompt / window finder
-    awful.key({ modkey },            "r",     function () awful.util.spawn_with_shell("rofi -modi drun,window,combi -combi-modi drun,window -theme lb -show combi") end,
+    awful.key({ modkey },            "r",     function () awful.util.spawn_with_shell("rofi -modi drun,window,combi -combi-modi drun,window -show combi") end,
               {description = "run rofi launcher", group = "launcher"}),
 
     awful.key({ modkey }, "x",
