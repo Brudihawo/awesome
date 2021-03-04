@@ -2,24 +2,24 @@
 -- awesome wal theme --
 -----------------------
 
-foreground="#c7e3f3"
-background="#081132"
-color0="#081132"
-color1="#12649A"
-color2="#3872A7"
-color3="#1B87BB"
-color4="#5489B6"
-color5="#68A1D2"
-color6="#A3B5D2"
-color7="#c7e3f3"
-color8="#8b9eaa"
-color9="#12649A"
-color10="#3872A7"
-color11="#1B87BB"
-color12="#5489B6"
-color13="#68A1D2"
-color14="#A3B5D2"
-color15="#c7e3f3"
+foreground="#eddeda"
+background="#241f23"
+color0="#241f23"
+color1="#E46E0B"
+color2="#CC4855"
+color3="#CEA262"
+color4="#E7CA74"
+color5="#C67B84"
+color6="#C1B3AE"
+color7="#eddeda"
+color8="#a59b98"
+color9="#E46E0B"
+color10="#CC4855"
+color11="#CEA262"
+color12="#E7CA74"
+color13="#C67B84"
+color14="#C1B3AE"
+color15="#eddeda"
 
 -- taglist colors
 local theme_assets = require("beautiful.theme_assets")
@@ -80,7 +80,7 @@ theme.taglist_fg_empty = background
 
 theme.taglist_separator = color1
 
-theme.taglist_square_sel = color5
+theme.taglist_square_sel = color6
 
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
