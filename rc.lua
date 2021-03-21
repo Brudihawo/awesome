@@ -49,7 +49,7 @@ end
 local theme_path = string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), "wal_theme")
 beautiful.init(theme_path)
 -- This is used later as the default terminal and editor to run.
-terminal = "st"
+terminal = "termite -e fish"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -307,6 +307,7 @@ awful.screen.connect_for_each_screen(function(s)
     -- Create the wibox
     s.wibox_left = awful.wibar({ position = "top",
                                  screen   = s,
+                                 height   = beautiful.panel_height,
                                })
 
     local time_widget = wibox.widget {
@@ -705,5 +706,5 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 -- Autostart applications
 awful.util.spawn_with_shell("nitrogen --restore")
-awful.util.spawn_with_shell("picom --config ~/.config/picom/picom.conf")
+awful.util.spawn_with_shell("picom --config ~/.config/picom/picom.conf --experimental-backends")
 -- }}}
